@@ -1,65 +1,75 @@
-import Image from "next/image";
+'use client';
+
+import React, { useEffect, useState, useMemo } from 'react';
+import { Book } from '@/lib/types';
+import { fetchBooks } from '@/lib/books';
+import { fuzzySearch } from '@/lib/utils';
+import { Header } from '@/components/Header';
+import { BookGrid } from '@/components/BookGrid';
+import { Loader2 } from 'lucide-react';
 
 export default function Home() {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadBooks() {
+      try {
+        const data = await fetchBooks();
+        setBooks(data);
+      } catch (error) {
+        console.error('Failed to load books:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadBooks();
+  }, []);
+
+  const filteredBooks = useMemo(() => {
+    return fuzzySearch(searchQuery, books, ['title', 'author', 'originalName']);
+  }, [searchQuery, books]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen pt-32 pb-12">
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(251,191,36,0.05)_0%,rgba(0,0,0,0)_50%)]" />
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_100%_100%,rgba(245,158,11,0.05)_0%,rgba(0,0,0,0)_50%)]" />
+
+      <Header
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        count={filteredBooks.length}
+      />
+
+      <div className="container mx-auto max-w-7xl px-6">
+        {loading ? (
+          <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
+            <Loader2 className="h-10 w-10 animate-spin text-amber-500" />
+            <p className="font-medium text-white/40 animate-pulse tracking-widest uppercase text-xs">
+              Cargando biblioteca...
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {searchQuery && (
+              <p className="text-sm font-medium text-white/40">
+                Mostrando {filteredBooks.length} resultados para "{searchQuery}"
+              </p>
+            )}
+            <BookGrid books={filteredBooks} />
+          </div>
+        )}
+      </div>
+
+      <footer className="mt-20 border-t border-white/5 py-10">
+        <div className="mx-auto max-w-7xl px-6 text-center">
+          <p className="text-sm font-medium text-white/20">
+            © 2026 Club de Lectura Digital • {books.length} libros disponibles
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </footer>
+    </main>
   );
 }
