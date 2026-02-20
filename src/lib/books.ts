@@ -13,13 +13,19 @@ export async function fetchBooks(): Promise<Book[]> {
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
-                    const books: Book[] = results.data.map((row) => ({
-                        title: row["Título Curado"] || "",
-                        author: row["Carpeta / Autor"] || "",
-                        url: row["Enlace Directo"] || "",
-                        originalName: row["Nombre Original"] || "",
-                        date: row["Fecha"] || "",
-                    }));
+                    const books: Book[] = results.data.map((row) => {
+                        const originalName = row["Nombre Original"] || "";
+                        const extension = originalName.split('.').pop()?.toUpperCase() || "???";
+
+                        return {
+                            title: row["Título Curado"] || "",
+                            author: row["Carpeta / Autor"] || "",
+                            url: row["Enlace Directo"] || "",
+                            originalName: originalName,
+                            extension: extension.length > 4 ? "DOC" : extension, // Fallback for long strings
+                            date: row["Fecha"] || "",
+                        };
+                    });
                     resolve(books);
                 },
                 error: (error: any) => {

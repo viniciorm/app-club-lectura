@@ -11,8 +11,13 @@ export const BookCard: React.FC<BookCardProps> = ({ book }) => {
     return (
         <div className="glass group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 hover:shadow-2xl hover:shadow-white/5">
             <div className="mb-4 flex items-center justify-between">
-                <div className="rounded-lg bg-white/10 p-2 text-white">
-                    <BookOpen className="h-6 w-6" />
+                <div className="flex items-center gap-3">
+                    <div className="rounded-lg bg-white/10 p-2 text-white">
+                        <BookOpen className="h-6 w-6" />
+                    </div>
+                    <span className="rounded-md bg-amber-400/10 px-2 py-1 text-[10px] font-black tracking-tighter text-amber-400 border border-amber-400/20">
+                        {book.extension}
+                    </span>
                 </div>
                 <span className="text-xs font-medium text-white/40">{book.date.split(' ')[0]}</span>
             </div>

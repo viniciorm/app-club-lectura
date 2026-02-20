@@ -3,6 +3,7 @@ export interface Book {
   author: string;
   url: string;
   originalName: string;
+  extension: string;
   date: string;
 }
 
