@@ -7,12 +7,14 @@ export function normalizeText(text: string): string {
 
 export function fuzzySearch(query: string, items: any[], keys: string[]) {
     const normalizedQuery = normalizeText(query);
-    if (!normalizedQuery) return items;
+    if (!normalizedQuery) return items || [];
+    if (!Array.isArray(items)) return [];
 
     return items.filter((item) => {
+        if (!item) return false;
         return keys.some((key) => {
             const value = item[key];
-            if (!value) return false;
+            if (value === undefined || value === null) return false;
             return normalizeText(String(value)).includes(normalizedQuery);
         });
     });
