@@ -1,6 +1,7 @@
 import React from 'react';
 import { Book } from '@/lib/types';
-import { ExternalLink, BookOpen } from 'lucide-react';
+import { Download, BookOpen } from 'lucide-react';
+import { getDownloadUrl } from '@/lib/utils';
 
 interface BookCardProps {
     book: Book;
@@ -29,13 +30,13 @@ export const BookCard: React.FC<BookCardProps> = ({ book }) => {
             </div>
 
             <a
-                href={book.url}
+                href={getDownloadUrl(book.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-black transition-all duration-300 hover:bg-amber-400 hover:scale-[1.05] active:scale-95"
             >
-                Leer Libro 📖
-                <ExternalLink className="h-4 w-4" />
+                Descargar Libro 📖
+                <Download className="h-4 w-4" />
             </a>
         </div>
     );

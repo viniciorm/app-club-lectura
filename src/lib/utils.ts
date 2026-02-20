@@ -17,3 +17,13 @@ export function fuzzySearch(query: string, items: any[], keys: string[]) {
         });
     });
 }
+
+export function getDownloadUrl(viewUrl: string): string {
+    // Converts https://drive.google.com/file/d/ID/view?usp=drivesdk
+    // to https://drive.google.com/uc?export=download&id=ID
+    const match = viewUrl.match(/\/d\/(.+?)\//);
+    if (match && match[1]) {
+        return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+    }
+    return viewUrl;
+}
