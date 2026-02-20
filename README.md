@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Club de Lectura - Biblioteca Digital 📚
 
-## Getting Started
+Este proyecto es una WebApp moderna diseñada para un club de lectura, permitiendo explorar y descargar más de 1,800 títulos de forma eficiente y elegante.
 
-First, run the development server:
+## ✨ Características
 
+- **Diseño Glassmorphism**: Estética premium con transparencias y modo oscuro dinámico.
+- **Búsqueda Avanzada (Fuzzy Search)**: Filtro en tiempo real que ignora acentos y mayúsculas.
+- **Descargas Directas**: Botón optimizado para descargar archivos directamente desde Google Drive.
+- **Indicadores de Formato**: Detección automática de extensiones (PDF, EPUB, etc.) con etiquetas visuales.
+- **Optimización ISR**: Revalidación automática de datos cada hora para asegurar que la biblioteca esté siempre actualizada.
+- **Mobile First**: Totalmente responsivo para una experiencia fluida en cualquier dispositivo.
+
+## 🛠️ Tecnologías
+
+- **Framework**: [Next.js 14+](https://nextjs.org/) (App Router)
+- **Estilos**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Procesamiento de Datos**: [PapaParse](https://www.papaparse.com/)
+- **Iconos**: [Lucide React](https://lucide.dev/)
+
+## 🚀 Configuración e Instalación
+
+### 1. Requisitos previos
+- Node.js 18+ instalado.
+- Un repositorio de GitHub para el despliegue.
+
+### 2. Instalación local
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clonar el repositorio
+git clone <tu-repo-url>
+cd app-club-lectura
+
+# Instalar dependencias
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Configuración de Variables de Entorno
+El enlace a la fuente de datos (CSV) está protegido y no se sube al control de versiones. Debes configurar la URL de tu hoja de cálculo pública.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Copia el archivo de ejemplo:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+2. Edita `.env.local` y añade tu URL:
+   ```env
+   NEXT_PUBLIC_CSV_URL=https://your-public-google-sheets-csv-link
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Despliegue en Vercel
+1. Conecta tu repositorio a un nuevo proyecto en Vercel.
+2. En la sección de **Environment Variables**, añade `NEXT_PUBLIC_CSV_URL` con el enlace al CSV.
+3. ¡Despliega y listo!
 
-## Learn More
+## 📄 Notas de Desarrollo
+Los datos se consumen desde un CSV público de Google Sheets. El sistema extrae automáticamente el formato del archivo desde la columna "Nombre Original" y genera enlaces de descarga directa transformando los URLs de visualización de Drive.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Proyecto creado como demostración de una WebApp de alto rendimiento y estética moderna.

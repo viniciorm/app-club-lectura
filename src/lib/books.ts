@@ -1,11 +1,15 @@
 import Papa from "papaparse";
 import { Book, CSVBook } from "./types";
 
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTv78_T9KrkAUyiUVrI1l3yLh7dTFAGrB_jDEFQJH0a8fm77yA2A9hvrF-Funbbj1safFLJ31Av6Ktx/pub?gid=0&single=true&output=csv";
+const CSV_URL = process.env.NEXT_PUBLIC_CSV_URL || "";
 
 export const revalidate = 3600;
 
 export async function fetchBooks(): Promise<Book[]> {
+    if (!CSV_URL) {
+        console.error("NEXT_PUBLIC_CSV_URL is not defined");
+        return [];
+    }
     try {
         const response = await fetch(CSV_URL, {
             next: { revalidate: 3600 }
