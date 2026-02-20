@@ -2,10 +2,10 @@ import Papa from "papaparse";
 import { Book, CSVBook } from "./types";
 
 export async function fetchBooks(): Promise<Book[]> {
-    const CSV_URL = process.env.NEXT_PUBLIC_CSV_URL || "";
+    const CSV_URL = process.env.NEXT_PUBLIC_SHEET_CSV_URL || process.env.NEXT_PUBLIC_CSV_URL || "";
 
     if (!CSV_URL) {
-        console.error("NEXT_PUBLIC_CSV_URL is not defined in environment variables");
+        console.error("Neither NEXT_PUBLIC_SHEET_CSV_URL nor NEXT_PUBLIC_CSV_URL is defined");
         return [];
     }
 
